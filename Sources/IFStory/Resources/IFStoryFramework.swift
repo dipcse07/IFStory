@@ -10,7 +10,7 @@ import Foundation
 public class IFStoryFramework : NSObject {
     static let bundleName = "IFStory"
 
-    public static let bundle = Bundle(for: Self.self)!
+    public static let bundle = Bundle(for:IFStoryFramework.self)
 
     /// Returns the resource bundle associated with the current Swift module. This is required for SPM use
     public static var module: Bundle = {
@@ -21,7 +21,7 @@ public class IFStoryFramework : NSObject {
             Bundle.main.resourceURL,
 
             // Bundle should be present here when the package is linked into a framework.
-            Bundle(for: MyFramework.self).resourceURL,
+            Bundle(for: IFStoryFramework.self).resourceURL,
 
             // For command-line tools.
             Bundle.main.bundleURL
@@ -33,6 +33,6 @@ public class IFStoryFramework : NSObject {
                 return bundle
             }
         }
-        return MyFramework.bundle
+        return IFStoryFramework.bundle
     }()
 }
