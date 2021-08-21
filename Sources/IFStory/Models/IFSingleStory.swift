@@ -5,7 +5,7 @@ import Foundation
 public class IFSingleStory: Codable {
     // Note: To retain lastPlayedSnapIndex value for each story making this type as class
     public var totalSnapInStory: Int
-    public var snapsInSingleStory: [IFSnap]?
+    public var snaps: [IFSnap]?
     public var storyIdentifier: String
     public var lastUpdated: String
     public var user: IFUser

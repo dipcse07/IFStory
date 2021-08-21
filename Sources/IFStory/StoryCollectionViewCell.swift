@@ -9,24 +9,16 @@ import UIKit
 import Kingfisher
 
 class StoryCollectionViewCell: UICollectionViewCell{
-//    /Volumes/MYMACHDD/XcodeTutoProjects/customStoryTest/IFStory/Sources/IFStory/CollectionView/StoryCollectionViewCell.swift:9:8: Compiling for iOS 9.0, but module 'Kingfisher' has a minimum deployment target of iOS 10.0: /Users/dip/Library/Developer/Xcode/DerivedData/customStoryTest-fcxpayneqsohjrajmmbczeujtsbh/Build/Products/Debug-iphoneos/Kingfisher.swiftmodule/arm64-apple-ios.swiftmodule
-//    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        // self.setupViewDidLoad()
-       // self.setUpConstraintsForVideoAndImagePreviewView()
         self.setupViewDidLoad()
     }
     
-   
     public var story: IFSingleStory! {
         didSet{
-           // self.setUpConstraintsForVideoAndImagePreviewView()
             self.setUpConstraintsForVideoAndImagePreviewView()
             self.setupViewWillAppear()
-            print("story count after Passing story",story.snapsInSingleStory?.count)
-            
         }
     }
     //Identifiers
@@ -37,26 +29,18 @@ class StoryCollectionViewCell: UICollectionViewCell{
         }
     }
     
-    
-    
-    
     @IBOutlet weak var videoView: UIView!
     @IBOutlet weak var imageView: UIView!
     @IBOutlet weak var view: UIView!
-    
     @IBOutlet weak var progressView: UIView!
-    
     @IBOutlet var progressViewHolder: UIView!
-    
     @IBOutlet var topTitleLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
-    
     @IBOutlet var storyImageView: UIImageView!
     @IBOutlet var avatarImageView: UIImageView!
     @IBOutlet var leftIconImageView: UIImageView!
     @IBOutlet var rightIconImageView: UIImageView!
     @IBOutlet weak var resizableView:UIView!
-    
     @IBOutlet var countLabel: UILabel!
     
     @IBOutlet var nextButton: UIButton! {
@@ -64,21 +48,19 @@ class StoryCollectionViewCell: UICollectionViewCell{
             self.nextButton.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
         }
     }
+    
     @IBOutlet var prevButton: UIButton! {
         didSet {
             self.prevButton.addTarget(self, action: #selector(prevAction), for: .touchUpInside)
         }
-        
     }
     
     public var currentViewingStoryIndex = 0
     private var snapIndex = 0
     public var igStories: IFStories!
     private var snapCount = 0
-    //  private var stories = [IGStory]()
     private var nextSnapIndex = 0
     public var storyIndexPath: IndexPath!
-    
     var progressTimer = Timer()
     var isProgressTimerInvalidate = false
     private var automaticDissappearAfterSeconds = 5.0
@@ -97,9 +79,6 @@ class StoryCollectionViewCell: UICollectionViewCell{
     var resizeViewLeftConstraints:CGFloat = 0
     var resizeViewRightConstraints:CGFloat = 0
     var resizeViewCornerRadius:CGFloat = 0
-
-    
-    
     
    private func setUpConstraintsForVideoAndImagePreviewView() {
 
@@ -120,21 +99,15 @@ class StoryCollectionViewCell: UICollectionViewCell{
             self.resizableView.rightAnchor.constraint(equalTo: self.progressView.rightAnchor, constant: -resizeViewRightConstraints).isActive = true
             self.resizableView.bottomAnchor.constraint(equalTo: self.progressView.bottomAnchor, constant: -resizeViewBottomConstraints).isActive = true
                 self.resizableView.layer.cornerRadius = resizeViewCornerRadius
-            
         }
-        
-        
-        
+
     }
-    
-  
+
     private func setupViewDidLoad() {
         //self.stories = igStories.stories
         self.avatarImageView.layer.cornerRadius = avatarImageView.frame.size.width * 0.50
         //self.storyImageView.layer.cornerRadius = 20.0
         self.storyImageView.backgroundColor = .black
-        
-        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
         avatarImageView.isUserInteractionEnabled = true
         avatarImageView.addGestureRecognizer(tapGestureRecognizer)
@@ -150,20 +123,15 @@ class StoryCollectionViewCell: UICollectionViewCell{
         self.initProgressViews()
         self.avatarImageView.transform = .init(scaleX: 0.50, y: 0.50)
         self.topTitleLabel.transform = .init(scaleX: 1, y: 0.85)
-        
         self.progressRate = automaticDissappearAfterSeconds/1000
-        
         self.topTitleLabel.text = story.user.userName
-        
-        if let storySnaps = story.snapsInSingleStory, !story!.isSeen {
-        
+
+        if let storySnaps = story.snaps, !story!.isSeen {
             for storySnap in storySnaps {
                 print(storySnap.kind)
                 if !storySnap.isSeen{
                     if storySnap.kind != StoryMimeType.video {
-                        
-                        
-                        imageView.isHidden = false
+                    imageView.isHidden = false
                         
                     let singleStoryImage = storySnap.storySnapUrl
                     self.storyImageView.kf.indicatorType = .activity
@@ -198,7 +166,7 @@ class StoryCollectionViewCell: UICollectionViewCell{
                 }
             }
         } else {
-            if let storySnap = story.snapsInSingleStory?.first{
+            if let storySnap = story.snaps?.first{
                 let singleStoryImage  = storySnap.storySnapUrl
                 self.storyImageView.kf.indicatorType = .activity
                 self.storyImageView.kf.setImage(with: URL(string: singleStoryImage), placeholder: nil , options: nil) { (_) in
@@ -214,14 +182,11 @@ class StoryCollectionViewCell: UICollectionViewCell{
             
         }
         self.timeLabel.text = story.lastUpdated
-        
-        
-        
         if currentViewingStoryIndex == 0 {
             self.leftIconImageView.isHidden = true
             self.rightIconImageView.isHidden = false
         }
-        else if currentViewingStoryIndex == story.snapsInSingleStory!.count  - 1 {
+        else if currentViewingStoryIndex == story.snaps!.count  - 1 {
             self.leftIconImageView.isHidden = false
             self.rightIconImageView.isHidden = true
         }
@@ -229,23 +194,22 @@ class StoryCollectionViewCell: UICollectionViewCell{
             self.leftIconImageView.isHidden = false
             self.rightIconImageView.isHidden = false
         }
-        
+    
         self.timerProgressStartAt = 0.0
         
         UIView.animate(withDuration: 0.5) {
             self.avatarImageView.transform = .init(scaleX: 1.25, y: 1.25)
             self.topTitleLabel.transform = .identity
         }
+    
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             UIView.animate(withDuration: 0.5) {
                 self.avatarImageView.transform = .identity
-                //self.topTitleLabel.transform = .identity
             }
         }
 
     }
-    
-    
+
     private func initProgressViews() {
         
         for subViews in self.progressViewHolder.subviews {
@@ -253,6 +217,7 @@ class StoryCollectionViewCell: UICollectionViewCell{
         }
         self.topProgressViews.removeAll()
         
+        let storiyImages = story.snaps
         let stackView   = UIStackView()
         stackView.axis  = .horizontal
         stackView.contentMode = .scaleAspectFill
@@ -261,14 +226,6 @@ class StoryCollectionViewCell: UICollectionViewCell{
         stackView.spacing   = 8.0
         stackView.frame = CGRect(x: 0, y: 0, width: self.progressViewHolder.frame.width, height: 6)
 
-//        stackView.centerYanchor.constraint(equalTo: self.progressViewHolder.centerYanchor).isActive = true
-       
-       
-        
-        
-        //stackView.translatesAutoresizingMaskIntoConstraints = false
-        let storiyImages = story.snapsInSingleStory
-        
         for _ in 0..<storiyImages!.count {
             let progressView = UIProgressView()
             progressView.tintColor = .white
@@ -287,10 +244,7 @@ class StoryCollectionViewCell: UICollectionViewCell{
     
     
      func updateSnap(index: Int) {
-        
-        self.setNeedsLayout()
-        self.setNeedsDisplay()
-        if let snaps = story.snapsInSingleStory {
+        if let snaps = story.snaps {
             if index > 0 {
                 self.fullScreenStoryDelegateForCell?.snapDidDisappear(previousSnap: snaps[index - 1])
             }
@@ -318,8 +272,6 @@ class StoryCollectionViewCell: UICollectionViewCell{
                     let videoView = createVideoView()
                     startPlayer(videoView: videoView, with: snap.storySnapUrl)
                 }
-                
-                
             }
             
             let nextSnapIndex = index + 1
@@ -337,13 +289,13 @@ class StoryCollectionViewCell: UICollectionViewCell{
     
     @objc func closeButtonAction() {
         self.progressTimer.invalidate()
-        fullScreenStoryDelegateForCell?.snapClosed(isClosed:true, atStroy: story, forStoryIndexPath: storyIndexPath, forSnap: story.snapsInSingleStory![snapIndex])
+        fullScreenStoryDelegateForCell?.snapClosed(isClosed:true, atStroy: story, forStoryIndexPath: storyIndexPath, forSnap: story.snaps![snapIndex])
         
     }
     
     @objc func nextAction() {
         
-        let imagesInCurrentStory = story.snapsInSingleStory
+        let imagesInCurrentStory = story.snaps
         
         if self.currentViewingStoryIndex < imagesInCurrentStory!.count-1 {
             
@@ -370,7 +322,7 @@ class StoryCollectionViewCell: UICollectionViewCell{
                 self.snapIndex = 0
                 self.progressTimer.invalidate()
                 currentViewingStoryIndex += 1
-                fullScreenStoryDelegateForCell?.snapClosed(isClosed: false, atStroy: story, forStoryIndexPath: storyIndexPath, forSnap: (story.snapsInSingleStory?.last)!)
+                fullScreenStoryDelegateForCell?.snapClosed(isClosed: false, atStroy: story, forStoryIndexPath: storyIndexPath, forSnap: (story.snaps?.last)!)
                 print("going to next story")
                 //                UIView.animate(withDuration: 0.2) {
                 //                    self.setupViewWillAppear()
@@ -385,7 +337,7 @@ class StoryCollectionViewCell: UICollectionViewCell{
             else {
                 currentViewingStoryIndex = 0
                 self.progressTimer.invalidate()
-                fullScreenStoryDelegateForCell?.snapClosed(isClosed: false, atStroy: story, forStoryIndexPath: storyIndexPath, forSnap: (story.snapsInSingleStory?.last)!)
+                fullScreenStoryDelegateForCell?.snapClosed(isClosed: false, atStroy: story, forStoryIndexPath: storyIndexPath, forSnap: (story.snaps?.last)!)
                 print("going to next story")
             }
             
@@ -423,7 +375,7 @@ class StoryCollectionViewCell: UICollectionViewCell{
                                     self.setupViewWillAppear()
                                     
                                 }
-                fullScreenStoryDelegateForCell?.goToPreviousStroy(atStroy: story, forStoryIndexPath: storyIndexPath, forCell: self, forSnap: (story.snapsInSingleStory?.first)!)
+                fullScreenStoryDelegateForCell?.goToPreviousStroy(atStroy: story, forStoryIndexPath: storyIndexPath, forCell: self, forSnap: (story.snaps?.first)!)
             }
             
             
@@ -447,7 +399,8 @@ class StoryCollectionViewCell: UICollectionViewCell{
         //self.countLabel.text = "\(currentViewingStoryIndex+1)\n\(storyImageIndex+1)"
         if timerProgressStartAt > 1.0 {
             //self.closeButtonAction()
-            let snapsInCurrentStory = story.snapsInSingleStory
+            let snapsInCurrentStory = story.snaps
+            print("total snaps in current story: \(snapsInCurrentStory?.count)")
             
             if self.snapIndex < snapsInCurrentStory!.count-1 {
                 
