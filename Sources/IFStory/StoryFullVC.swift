@@ -61,39 +61,6 @@ public class StoryFullVC: UIViewController {
         self.stories = self.igStories.stories
     }
 
-//    func scrollAutomatically() {
-//
-//        if let coll  = storyCollectionView{
-//            for cell in coll.visibleCells {
-//                let indexPath: IndexPath? = coll.indexPath(for: cell)
-//                if ((indexPath?.row)!  < stories.count - 1){
-//                    let indexPath1: IndexPath?
-//
-//                    indexPath1 = IndexPath.init(row: (indexPath?.row)! + 1, section: (indexPath?.section)!)
-//                   if indexPath1!.item > 0 {
-//                    let prevIndex = indexPath1!.item - 1
-//                    delegate?.storyDidDisAppear(previousStory: stories[prevIndex] )
-//                    }
-//
-//                    delegate?.storyDidAppear(currentStoryInProgress: stories[indexPath1!.item])
-//                    coll.scrollToItem(at: indexPath1!, at: .right, animated: true)
-//
-//                    if indexPath1!.item < stories.count - 2 {
-//                        delegate?.storyWillAppear(nextStory: stories[indexPath1!.item + 1])
-//                    }
-//                }
-//                else{
-//                    let indexPath1: IndexPath?
-////                    indexPath1 = IndexPath.init(row: 0, section: (indexPath?.section)!)
-////                    coll.scrollToItem(at: indexPath1!, at: .left, animated: true)
-//
-//                   // self.dismiss(animated: true, completion: nil)
-//                }
-//
-//            }
-//        }
-//    }
-
 }
 
 extension StoryFullVC:  UICollectionViewDataSource {
@@ -127,11 +94,11 @@ extension StoryFullVC:  UICollectionViewDataSource {
 //            }
         
 //       let currentCell = cell as! StoryCollectionViewCell
-//        print(currentCell.isProgressTimerInvalidate)
-//        currentCell.setupViewWillAppear()
-//        
-        
-        
+//        print("is current cell progress timer invalidated: ", currentCell.isProgressTimerInvalidate)
+//        if currentCell.isProgressTimerInvalidate {
+//        currentCell.progressTimer.fire()
+//        }
+
     }
     
 }
@@ -167,10 +134,17 @@ extension StoryFullVC: FullScreenSnapDelegate{
     
     
     func goToNextStory(atStory: IFSingleStory, forSnap: IFSnap, indexPath: IndexPath) {
-        print(" current index path: ", indexPath.row)
-        let indexPath = IndexPath(item: indexPath.item + 1, section: 0)
-        storyCollectionView.scrollToItem(at: indexPath, at: .right, animated: false)
+    
+        if indexPath.item <  self.stories.count - 1 {
+            let indexPath = IndexPath(item: indexPath.item + 1, section: 0)
+            storyCollectionView.scrollToItem(at: indexPath, at: .right, animated: false)
+        }else {
+        
+        self.dismiss(animated: true)
+            delegate?.snapClosed(atStroy: atStory , forStoryIndexPath: indexPath, forSnap: forSnap)
+        }
     }
+    
     func snapWillAppear(nextSnap: IFSnap?) {
         //print("snap will Appear: ", nextSnap?.lastUpdated)
         delegate?.snapWillAppear(nextSnap: nextSnap)
@@ -187,7 +161,6 @@ extension StoryFullVC: FullScreenSnapDelegate{
     }
     
     func profileImageTapped(userInfo: IFUser?) {
-     //   print("ProfileUserTapped in Story Collection View Controller for Story Cell: ", userInfo?.userName)
         delegate?.profileImageTapped(userInfo: userInfo)
     }
     
@@ -213,7 +186,8 @@ extension StoryFullVC: FullScreenSnapDelegate{
             forCell.progressTimer.invalidate()
             forCell.isProgressTimerInvalidate = true
             let indexPath = IndexPath(item: forStoryIndexPath.item - 1, section: 0)
-                         storyCollectionView.scrollToItem(at: indexPath, at: .left, animated: false)
+            storyCollectionView.reloadItems(at: [indexPath])
+            storyCollectionView.scrollToItem(at: indexPath, at: .left, animated: false)
         }
     }
     
