@@ -3,10 +3,10 @@
 It's a simple library to use story module like facebook/ instagram
 ## Installation
 
-Go to  [customStory](https:github.com/dipcse07) and download the customModule folder
+Go to  [customStoryTest](https://github.com/dipcse07/cutomStoryTest) and download the demo Project for try
 
 ```bash
-Drag and Drop the folder to your project. 
+Drag and Drop the folder to your project. or use it with spm
 This module will require KingFisher for image caching and downloads
 ```
 
