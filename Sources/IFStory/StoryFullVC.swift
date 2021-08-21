@@ -8,9 +8,8 @@
 import UIKit
 
 public class StoryFullVC: UIViewController {
-    
-    
     var onceOnly = false
+    
     var igStories: IFStories!
     var delegate: FullScreenSotryDelegate?
     var storyIndex: Int!
@@ -25,37 +24,22 @@ public class StoryFullVC: UIViewController {
     
     private var stories = [IFSingleStory]()
     
-   // @IBOutlet weak var storyCollectionView: UICollectionView!
-    private var storyCollectionView: UICollectionView!
-    private var collectonViewCell = StoryCollectionViewCell()
+    @IBOutlet weak var storyCollectionView: UICollectionView!
     
- public init(with stories: IFStories, handPickedStoryIndex: Int, delegate:FullScreenSotryDelegate) {
-
+    public init(with stories: IFStories, handPickedStoryIndex: Int, delegate:FullScreenSotryDelegate) {
         self.igStories = stories
         self.delegate = delegate
         self.storyIndex = handPickedStoryIndex
-    let nibName = String(describing: Self.self)
-    super.init(nibName: nibName, bundle: IFStoryFramework.module)
+        let nibName = String(describing: Self.self)
+        print("StoryFullVC Nib Name: " + nibName)
+        super.init(nibName: nibName, bundle: Bundle.module)
         self.modalPresentationStyle = .fullScreen
         
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    private func customInit() {
-//        let bundle = Bundle.main
-//        let nibName = String(describing: Self.self)
-//        bundle.loadNibNamed(nibName, owner: self, options: nil)
-//        addSubview(contentView)
-//        contentView.frame = bounds
-//        contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//
-//
-//    }
-//
     
     public func setVideoOrImageView(top:CGFloat = 0, left:CGFloat = 0, right:CGFloat = 0, bottom:CGFloat = 0, cornerRadius:CGFloat){
         previewViewTop = top
@@ -70,15 +54,9 @@ public class StoryFullVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        self.storyCollectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: layout)
-//        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "collectionCell")
-        self.storyCollectionView.register(StoryCollectionViewCell.self, forCellWithReuseIdentifier: "StoryCollectionViewCell")
-        
-        self.storyCollectionView.delegate = self
-        self.storyCollectionView.dataSource = self
-        self.view.addSubview(self.storyCollectionView)
-       
+        storyCollectionView.dataSource = self
+        storyCollectionView.delegate = self
+        storyCollectionView.register(UINib(nibName: "StoryCollectionViewCell", bundle: Bundle.module), forCellWithReuseIdentifier: "StoryCollectionViewCell")
        // populateStories()
         self.stories = self.igStories.stories
     }

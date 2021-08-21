@@ -9,34 +9,20 @@ import UIKit
 import Kingfisher
 
 class StoryCollectionViewCell: UICollectionViewCell{
-    
-    
- override init(frame: CGRect) {
-        super.init(frame: frame)
-    customInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        customInit()
-    }
-    
+//    /Volumes/MYMACHDD/XcodeTutoProjects/customStoryTest/IFStory/Sources/IFStory/CollectionView/StoryCollectionViewCell.swift:9:8: Compiling for iOS 9.0, but module 'Kingfisher' has a minimum deployment target of iOS 10.0: /Users/dip/Library/Developer/Xcode/DerivedData/customStoryTest-fcxpayneqsohjrajmmbczeujtsbh/Build/Products/Debug-iphoneos/Kingfisher.swiftmodule/arm64-apple-ios.swiftmodule
+//    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         // self.setupViewDidLoad()
-        // self.setUpConstraintsForVideoAndImagePreviewView()
+       // self.setUpConstraintsForVideoAndImagePreviewView()
         self.setupViewDidLoad()
     }
     
-    private func customInit() {
-        let bundle = IFStoryFramework.module
-           let nibName = String(describing: Self.self)
-           bundle.loadNibNamed(nibName, owner: self, options: nil)
-   }
+   
     public var story: IFSingleStory! {
         didSet{
-            // self.setUpConstraintsForVideoAndImagePreviewView()
+           // self.setUpConstraintsForVideoAndImagePreviewView()
             self.setUpConstraintsForVideoAndImagePreviewView()
             self.setupViewWillAppear()
             print("story count after Passing story",story.snapsInSingleStory?.count)
@@ -111,32 +97,37 @@ class StoryCollectionViewCell: UICollectionViewCell{
     var resizeViewLeftConstraints:CGFloat = 0
     var resizeViewRightConstraints:CGFloat = 0
     var resizeViewCornerRadius:CGFloat = 0
+
     
-    private func setUpConstraintsForVideoAndImagePreviewView() {
-        
+    
+    
+   private func setUpConstraintsForVideoAndImagePreviewView() {
+
         self.resizableView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         if resizeViewCornerRadius == 0 {
-            
-            self.resizableView.topAnchor.constraint(equalTo: self.progressView.topAnchor , constant: resizeViewTopContraints).isActive = true
+
+        self.resizableView.topAnchor.constraint(equalTo: self.progressView.topAnchor , constant: resizeViewTopContraints).isActive = true
             self.resizableView.leftAnchor.constraint(equalTo: self.progressView.leftAnchor, constant: resizeViewLeftConstraints).isActive = true
             self.resizableView.rightAnchor.constraint(equalTo: self.progressView.rightAnchor, constant: -resizeViewRightConstraints).isActive = true
             self.resizableView.bottomAnchor.constraint(equalTo: self.progressView.bottomAnchor, constant: -resizeViewBottomConstraints).isActive = true
             self.resizableView.layer.cornerRadius = resizeViewCornerRadius
-            
+        
         } else if resizeViewCornerRadius > 0 {
             self.progressView.backgroundColor = UIColor(hex: "#56B07F")
             self.resizableView.topAnchor.constraint(equalTo: self.avatarImageView.bottomAnchor , constant: resizeViewTopContraints).isActive = true
             self.resizableView.leftAnchor.constraint(equalTo: self.progressView.leftAnchor, constant: resizeViewLeftConstraints).isActive = true
             self.resizableView.rightAnchor.constraint(equalTo: self.progressView.rightAnchor, constant: -resizeViewRightConstraints).isActive = true
             self.resizableView.bottomAnchor.constraint(equalTo: self.progressView.bottomAnchor, constant: -resizeViewBottomConstraints).isActive = true
-            self.resizableView.layer.cornerRadius = resizeViewCornerRadius
+                self.resizableView.layer.cornerRadius = resizeViewCornerRadius
             
         }
         
+        
+        
     }
     
-    
+  
     private func setupViewDidLoad() {
         //self.stories = igStories.stories
         self.avatarImageView.layer.cornerRadius = avatarImageView.frame.size.width * 0.50
@@ -155,7 +146,7 @@ class StoryCollectionViewCell: UICollectionViewCell{
         fullScreenStoryDelegateForCell?.profileImageTapped(userInfo: story.user)
     }
     
-    public  func setupViewWillAppear() {
+   public  func setupViewWillAppear() {
         self.initProgressViews()
         self.avatarImageView.transform = .init(scaleX: 0.50, y: 0.50)
         self.topTitleLabel.transform = .init(scaleX: 1, y: 0.85)
@@ -165,22 +156,23 @@ class StoryCollectionViewCell: UICollectionViewCell{
         self.topTitleLabel.text = story.user.userName
         
         if let storySnaps = story.snapsInSingleStory, !story!.isSeen {
-            
+        
             for storySnap in storySnaps {
                 print(storySnap.kind)
                 if !storySnap.isSeen{
                     if storySnap.kind != StoryMimeType.video {
                         
+                        
                         imageView.isHidden = false
                         
-                        let singleStoryImage = storySnap.storySnapUrl
-                        self.storyImageView.kf.indicatorType = .activity
-                        self.storyImageView.kf.setImage(with: URL(string: singleStoryImage), placeholder: nil , options: nil, completionHandler:  {  (_) in
-                            self.fullScreenStoryDelegateForCell?.snapDidAppear(currentSnapInProgress: storySnap)
-                            self.initTimerProgress()
-                        })
-                        break
-                        
+                    let singleStoryImage = storySnap.storySnapUrl
+                    self.storyImageView.kf.indicatorType = .activity
+                    self.storyImageView.kf.setImage(with: URL(string: singleStoryImage), placeholder: nil , options: nil, completionHandler:  {  (_) in
+                        self.fullScreenStoryDelegateForCell?.snapDidAppear(currentSnapInProgress: storySnap)
+                        self.initTimerProgress()
+                    })
+                break
+                    
                     }else {
                         self.progressTimer.invalidate()
                         self.isProgressTimerInvalidate = true
@@ -190,13 +182,13 @@ class StoryCollectionViewCell: UICollectionViewCell{
                             print("start player should not start from here")
                             self.playingVideoView = videoView
                             startPlayer(videoView: videoView, with: storySnap.storySnapUrl)
-                            //self.initTimerProgress()
+                           //self.initTimerProgress()
                         }else {
                             print("start player should start from here")
                             let videoView = createVideoView()
                             self.playingVideoView = videoView
                             startPlayer(videoView: videoView, with: storySnap.storySnapUrl)
-                            // self.initTimerProgress()
+                           // self.initTimerProgress()
                         }
                         break
                     }
@@ -250,7 +242,7 @@ class StoryCollectionViewCell: UICollectionViewCell{
                 //self.topTitleLabel.transform = .identity
             }
         }
-        
+
     }
     
     
@@ -268,10 +260,10 @@ class StoryCollectionViewCell: UICollectionViewCell{
         stackView.alignment = .center
         stackView.spacing   = 8.0
         stackView.frame = CGRect(x: 0, y: 0, width: self.progressViewHolder.frame.width, height: 6)
-        
-        //        stackView.centerYanchor.constraint(equalTo: self.progressViewHolder.centerYanchor).isActive = true
-        
-        
+
+//        stackView.centerYanchor.constraint(equalTo: self.progressViewHolder.centerYanchor).isActive = true
+       
+       
         
         
         //stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -287,14 +279,14 @@ class StoryCollectionViewCell: UICollectionViewCell{
             self.topProgressViews.append(progressView)
         }
         self.progressViewHolder.addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.leftAnchor.constraint(equalTo: self.progressViewHolder.leftAnchor, constant:0).isActive = true
-        stackView.rightAnchor.constraint(equalTo: self.progressViewHolder.rightAnchor, constant:0).isActive = true
+                stackView.translatesAutoresizingMaskIntoConstraints = false
+                stackView.leftAnchor.constraint(equalTo: self.progressViewHolder.leftAnchor, constant:0).isActive = true
+                stackView.rightAnchor.constraint(equalTo: self.progressViewHolder.rightAnchor, constant:0).isActive = true
     }
     
     
     
-    func updateSnap(index: Int) {
+     func updateSnap(index: Int) {
         
         self.setNeedsLayout()
         self.setNeedsDisplay()
@@ -309,11 +301,11 @@ class StoryCollectionViewCell: UICollectionViewCell{
                     self.progressTimer.fire()
                     isProgressTimerInvalidate = false
                 }
-                imageView.isHidden = false
-                let storyImageLink = snap.storySnapUrl
-                self.storyImageView.kf.setImage(with: URL(string: storyImageLink), placeholder:  nil , options: nil) { (_) in
-                    self.fullScreenStoryDelegateForCell?.snapDidAppear(currentSnapInProgress: snaps[index] )
-                }
+            imageView.isHidden = false
+            let storyImageLink = snap.storySnapUrl
+          self.storyImageView.kf.setImage(with: URL(string: storyImageLink), placeholder:  nil , options: nil) { (_) in
+            self.fullScreenStoryDelegateForCell?.snapDidAppear(currentSnapInProgress: snaps[index] )
+        }
                 
             } else {
                 imageView.isHidden = true
@@ -335,8 +327,8 @@ class StoryCollectionViewCell: UICollectionViewCell{
                 fullScreenStoryDelegateForCell?.snapWillAppear(nextSnap: snaps[nextSnapIndex])
             }
             
-        }else {
-            print("there is no snap to show in current snap or update the story")
+    }else {
+        print("there is no snap to show in current snap or update the story")
         }
     }
     
@@ -383,7 +375,7 @@ class StoryCollectionViewCell: UICollectionViewCell{
                 //                UIView.animate(withDuration: 0.2) {
                 //                    self.setupViewWillAppear()
                 //                }
-            }
+          }
             
         }
         else {
@@ -406,35 +398,35 @@ class StoryCollectionViewCell: UICollectionViewCell{
         if playingVideoView != nil {
             playingVideoView.stop()
         }
-        
-        if self.snapIndex > 0 {
-            self.progressTimer.invalidate()
-            self.topProgressViews[snapIndex].progress = 0.0
-            self.snapIndex -= 1
-            self.topProgressViews[snapIndex].progress = 0.0
-            self.timerProgressStartAt = 0.0
-            
-            
-            
-            UIView.animate(withDuration: 0.2) {
-                self.updateSnap(index: self.snapIndex)
-            }
-            
-            self.timerProgressStartAt += self.progressRate
-        }
-        else {
-            self.progressTimer.invalidate()
-            self.snapIndex = 0
-            self.timerProgressStartAt = 0.0
-            currentViewingStoryIndex -= 1
-            UIView.animate(withDuration: 0.2) {
-                self.setupViewWillAppear()
+       
+            if self.snapIndex > 0 {
+                self.progressTimer.invalidate()
+                self.topProgressViews[snapIndex].progress = 0.0
+                self.snapIndex -= 1
+                self.topProgressViews[snapIndex].progress = 0.0
+                self.timerProgressStartAt = 0.0
                 
+                
+                
+                UIView.animate(withDuration: 0.2) {
+                    self.updateSnap(index: self.snapIndex)
+                }
+                
+                self.timerProgressStartAt += self.progressRate
             }
-            fullScreenStoryDelegateForCell?.goToPreviousStroy(atStroy: story, forStoryIndexPath: storyIndexPath, forCell: self, forSnap: (story.snapsInSingleStory?.first)!)
-        }
-        
-        
+            else {
+                self.progressTimer.invalidate()
+                self.snapIndex = 0
+                self.timerProgressStartAt = 0.0
+                currentViewingStoryIndex -= 1
+                                UIView.animate(withDuration: 0.2) {
+                                    self.setupViewWillAppear()
+                                    
+                                }
+                fullScreenStoryDelegateForCell?.goToPreviousStroy(atStroy: story, forStoryIndexPath: storyIndexPath, forCell: self, forSnap: (story.snapsInSingleStory?.first)!)
+            }
+            
+            
         
     }
     
@@ -527,7 +519,7 @@ extension StoryCollectionViewCell {
     private func createVideoView() -> IFPlayerView {
         print("creating New Video View")
         let videoView = IFPlayerView.init(frame: CGRect(x: 0, y: 0, width: videoView.frame.width, height: videoView.frame.height))
-        videoView.tag = snapIndex + snapViewTagIndicator
+       videoView.tag = snapIndex + snapViewTagIndicator
         videoView.playerObserverDelegate = self
         print(videoView.subviews.count)
         print(self.videoView.subviews.count)
@@ -575,34 +567,34 @@ extension StoryCollectionViewCell: IFPlayerObserver {
             //let videoView = scrollview.subviews.filter{v in v.tag == snapIndex + snapViewTagIndicator}.first as? IGPlayerView
             if videoView.error == nil  {
                 print()
-                //                if let holderView = getProgressIndicatorView(with: snapIndex),
-                //                    let progressView = getProgressView(with: snapIndex) {
-                //                    progressView.story_identifier = self.story?.internalIdentifier
-                //                    progressView.snapIndex = snapIndex
-                if let duration = videoView.currentItem?.asset.duration {
-                    print(duration.value, duration.seconds)
-                    if Float(duration.value) > 0 {
-                        print("video duratjion: ", Float(duration.value))
-                        self.videoDuration = Float(duration.seconds)
-                        //                            progressView.start(with: duration.seconds, width: holderView.frame.width, completion: {(identifier, snapIndex, isCancelledAbruptly) in
-                        //                                if isCancelledAbruptly == false {
-                        //                                    self.videoSnapIndex = snapIndex
-                        //                                    self.stopPlayer()
-                        //                                    self.didCompleteProgress()
-                        //                                } else {
-                        //                                    self.videoSnapIndex = snapIndex
-                        //                                    self.stopPlayer()
-                        //                                }
-                        //                            })
-                    }else {
-                        debugPrint("Player error: Unable to play the video")
+//                if let holderView = getProgressIndicatorView(with: snapIndex),
+//                    let progressView = getProgressView(with: snapIndex) {
+//                    progressView.story_identifier = self.story?.internalIdentifier
+//                    progressView.snapIndex = snapIndex
+                    if let duration = videoView.currentItem?.asset.duration {
+                        print(duration.value, duration.seconds)
+                        if Float(duration.value) > 0 {
+                            print("video duratjion: ", Float(duration.value))
+                            self.videoDuration = Float(duration.seconds)
+//                            progressView.start(with: duration.seconds, width: holderView.frame.width, completion: {(identifier, snapIndex, isCancelledAbruptly) in
+//                                if isCancelledAbruptly == false {
+//                                    self.videoSnapIndex = snapIndex
+//                                    self.stopPlayer()
+//                                    self.didCompleteProgress()
+//                                } else {
+//                                    self.videoSnapIndex = snapIndex
+//                                    self.stopPlayer()
+//                                }
+//                            })
+                        }else {
+                            debugPrint("Player error: Unable to play the video")
+                        }
                     }
                 }
             }
         }
-    }
     
-    
+        
     
     
     func didCompletePlay() {
@@ -611,7 +603,7 @@ extension StoryCollectionViewCell: IFPlayerObserver {
     }
     
     func didTrack(progress: Float) {
-        print(progress)
+    print(progress)
         self.videoProgressDuration = (progress / videoDuration)
         
     }
@@ -619,5 +611,5 @@ extension StoryCollectionViewCell: IFPlayerObserver {
     func didFailed(withError error: String, for url: URL?) {
         
     }
-    
+
 }

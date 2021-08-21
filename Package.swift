@@ -25,7 +25,10 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "IFStory",
-            dependencies: ["Kingfisher"]),
+            dependencies: ["Kingfisher"],
+            resources: [
+                .process("StoryCollectionViewCell.xib"),
+                    .process("StoryFullVC.xib")]),
         .testTarget(
             name: "IFStoryTests",
             dependencies: ["IFStory"]),
