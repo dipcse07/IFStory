@@ -19,7 +19,7 @@ public class IFSingleStory: Codable {
     
     enum CodingKeys: String, CodingKey {
         case totalSnapInStory = "snaps_count"
-        case snapsInSingleStory = "snaps"
+        case snaps = "snaps"
         case storyIdentifier = "id"
         case lastUpdated = "last_updated"
         case user = "user"

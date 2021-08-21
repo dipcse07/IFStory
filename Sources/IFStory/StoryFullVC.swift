@@ -61,38 +61,38 @@ public class StoryFullVC: UIViewController {
         self.stories = self.igStories.stories
     }
 
-    func scrollAutomatically() {
-        
-        if let coll  = storyCollectionView{
-            for cell in coll.visibleCells {
-                let indexPath: IndexPath? = coll.indexPath(for: cell)
-                if ((indexPath?.row)!  < stories.count - 1){
-                    let indexPath1: IndexPath?
-                
-                    indexPath1 = IndexPath.init(row: (indexPath?.row)! + 1, section: (indexPath?.section)!)
-                   if indexPath1!.item > 0 {
-                    let prevIndex = indexPath1!.item - 1
-                    delegate?.storyDidDisAppear(previousStory: stories[prevIndex] )
-                    }
-                    
-                    delegate?.storyDidAppear(currentStoryInProgress: stories[indexPath1!.item])
-                    coll.scrollToItem(at: indexPath1!, at: .right, animated: true)
-                
-                    if indexPath1!.item < stories.count - 2 {
-                        delegate?.storyWillAppear(nextStory: stories[indexPath1!.item + 1])
-                    }
-                }
-                else{
-                    let indexPath1: IndexPath?
-//                    indexPath1 = IndexPath.init(row: 0, section: (indexPath?.section)!)
-//                    coll.scrollToItem(at: indexPath1!, at: .left, animated: true)
-                    
-                   // self.dismiss(animated: true, completion: nil)
-                }
-                
-            }
-        }
-    }
+//    func scrollAutomatically() {
+//
+//        if let coll  = storyCollectionView{
+//            for cell in coll.visibleCells {
+//                let indexPath: IndexPath? = coll.indexPath(for: cell)
+//                if ((indexPath?.row)!  < stories.count - 1){
+//                    let indexPath1: IndexPath?
+//
+//                    indexPath1 = IndexPath.init(row: (indexPath?.row)! + 1, section: (indexPath?.section)!)
+//                   if indexPath1!.item > 0 {
+//                    let prevIndex = indexPath1!.item - 1
+//                    delegate?.storyDidDisAppear(previousStory: stories[prevIndex] )
+//                    }
+//
+//                    delegate?.storyDidAppear(currentStoryInProgress: stories[indexPath1!.item])
+//                    coll.scrollToItem(at: indexPath1!, at: .right, animated: true)
+//
+//                    if indexPath1!.item < stories.count - 2 {
+//                        delegate?.storyWillAppear(nextStory: stories[indexPath1!.item + 1])
+//                    }
+//                }
+//                else{
+//                    let indexPath1: IndexPath?
+////                    indexPath1 = IndexPath.init(row: 0, section: (indexPath?.section)!)
+////                    coll.scrollToItem(at: indexPath1!, at: .left, animated: true)
+//
+//                   // self.dismiss(animated: true, completion: nil)
+//                }
+//
+//            }
+//        }
+//    }
 
 }
 
@@ -119,12 +119,12 @@ extension StoryFullVC:  UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if !onceOnly {
-              let indexToScrollTo = IndexPath(item: storyIndex , section: 0)
-              self.storyCollectionView.scrollToItem(at: indexToScrollTo, at: .left, animated: false)
-            delegate?.storyDidAppear(currentStoryInProgress: stories[indexToScrollTo.item])
-              onceOnly = true
-            }
+//        if !onceOnly {
+//              let indexToScrollTo = IndexPath(item: storyIndex , section: 0)
+//              self.storyCollectionView.scrollToItem(at: indexToScrollTo, at: .left, animated: false)
+//            delegate?.storyDidAppear(currentStoryInProgress: stories[indexToScrollTo.item])
+//              onceOnly = true
+//            }
         
 //       let currentCell = cell as! StoryCollectionViewCell
 //        print(currentCell.isProgressTimerInvalidate)
@@ -161,17 +161,23 @@ extension StoryFullVC: UICollectionViewDelegateFlowLayout {
 
 extension StoryFullVC: FullScreenSnapDelegate{
     func snapDidAppear(currentSnapInProgress: IFSnap?) {
-        print("snap Did Appear: ", currentSnapInProgress?.lastUpdated)
+      //  print("snap Did Appear: ", currentSnapInProgress?.lastUpdated)
         delegate?.snapDidAppear(currentSnapInProgress: currentSnapInProgress)
     }
     
+    
+    func goToNextStory(atStory: IFSingleStory, forSnap: IFSnap, indexPath: IndexPath) {
+        print(" current index path: ", indexPath.row)
+        let indexPath = IndexPath(item: indexPath.item + 1, section: 0)
+        storyCollectionView.scrollToItem(at: indexPath, at: .right, animated: false)
+    }
     func snapWillAppear(nextSnap: IFSnap?) {
-        print("snap will Appear: ", nextSnap?.lastUpdated)
+        //print("snap will Appear: ", nextSnap?.lastUpdated)
         delegate?.snapWillAppear(nextSnap: nextSnap)
     }
     
     func snapDidDisappear(previousSnap: IFSnap?) {
-        print("snap Did Disappear: ", previousSnap?.lastUpdated)
+        //print("snap Did Disappear: ", previousSnap?.lastUpdated)
         if let snap = previousSnap {
             self.previousSnap = snap
             delegate?.snapDidDisappear(previousSnap: previousSnap)
@@ -181,7 +187,7 @@ extension StoryFullVC: FullScreenSnapDelegate{
     }
     
     func profileImageTapped(userInfo: IFUser?) {
-        print("ProfileUserTapped in Story Collection View Controller for Story Cell: ", userInfo?.userName)
+     //   print("ProfileUserTapped in Story Collection View Controller for Story Cell: ", userInfo?.userName)
         delegate?.profileImageTapped(userInfo: userInfo)
     }
     
@@ -189,8 +195,8 @@ extension StoryFullVC: FullScreenSnapDelegate{
     
     func snapClosed(isClosed: Bool, atStroy: IFSingleStory, forStoryIndexPath:IndexPath, forSnap: IFSnap) {
         if forStoryIndexPath.item <  self.stories.count - 1, !isClosed {
-            print("Auto Scrolling to next Story Cell")
-            scrollAutomatically()
+           // print("Auto Scrolling to next Story Cell")
+//            scrollAutomatically()
         }else {
         
             print("Story CollectionViewController Dissmissed", forSnap.storySnapUrl)
