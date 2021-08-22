@@ -9,13 +9,13 @@ public class IFSingleStory: Codable {
     public var storyIdentifier: String
     public var lastUpdated: String
     public var user: IFUser
-	var isSeen = false
-	var storyType: String?
-	public var group: IFGroupInfo?
-	public var institute: IFInstitute?
-    var lastShowedSnapIndex = 0
-    var isWholeStoryViewed = false
-    var isCancelledSuddenly = false
+    public var isSeen = false
+    public var storyType: String?
+    public var group: IFGroupInfo?
+    public var institute: IFInstitute?
+    public var lastShowedSnapIndex = 0
+    public var isWholeStoryViewed = false
+    public var isCancelledSuddenly = false
     
     enum CodingKeys: String, CodingKey {
         case totalSnapInStory = "snaps_count"
@@ -23,10 +23,10 @@ public class IFSingleStory: Codable {
         case storyIdentifier = "id"
         case lastUpdated = "last_updated"
         case user = "user"
-		case isSeen = "is_seen"
-		case storyType = "story_type"
-		case group = "group"
-		case institute = "insitute"
+        case isSeen = "is_seen"
+        case storyType = "story_type"
+        case group = "group"
+        case institute = "insitute"
     }
 }
 

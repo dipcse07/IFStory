@@ -11,7 +11,7 @@ public class IFSnap: Codable {
     public let mimeType: String
     public let lastUpdated: String
     public let storySnapUrl: String
-	var isSeen = false
+	public var isSeen = false
     public var kind: StoryMimeType {
         switch mimeType {
         case StoryMimeType.image.rawValue:
