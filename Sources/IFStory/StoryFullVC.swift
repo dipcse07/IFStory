@@ -52,8 +52,7 @@ public class StoryFullVC: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
         storyCollectionView.dataSource = self
         storyCollectionView.delegate = self
         storyCollectionView.register(UINib(nibName: "StoryCollectionViewCell", bundle: Bundle.module), forCellWithReuseIdentifier: "StoryCollectionViewCell")

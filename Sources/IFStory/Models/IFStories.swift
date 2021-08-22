@@ -12,7 +12,7 @@ public class IFStories: Codable {
         case totalStoryCount = "total"
         case stories = "content"
     }
-    func copy() throws -> IFStories {
+   public func copy() throws -> IFStories {
         let data = try JSONEncoder().encode(self)
         let copy = try JSONDecoder().decode(IFStories.self, from: data)
         return copy
