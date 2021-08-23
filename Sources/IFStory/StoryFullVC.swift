@@ -30,10 +30,12 @@ public class StoryFullVC: UIViewController {
         self.igStories = stories
         self.delegate = delegate
         self.storyIndex = handPickedStoryIndex
+        
         let nibName = String(describing: Self.self)
         print("StoryFullVC Nib Name: " + nibName)
         super.init(nibName: nibName, bundle: Bundle.module)
         self.modalPresentationStyle = .fullScreen
+        
         
     }
     
